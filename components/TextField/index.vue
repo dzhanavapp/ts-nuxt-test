@@ -2,15 +2,18 @@
     div(class="input")
         label(for="base-currency", class="input__label", v-if="label") {{ label }}
         div(class="input__field")
-            input(v-model="value", id="base-currency", :class="['input__field-amount', {'input__field-amount_solo': !hasOptions}]")
-            select(class="input__field-currency", v-if="hasOptions" v-model="selected")
-                option(v-for="(option, index) in options", :key="index") {{ option }}
+            input(@input="handleInput", v-bind="$attrs" @blur="handleBlurInput" :value="value", id="base-currency", :class="['input__field-text', {'input__field-amount_solo': !hasOptions}]")
+            select(@input="handleChange", class="input__field-currency", v-if="hasOptions")
+                option(v-for="(option, index) in options", :selected="option === selected", :value="option", :key="option") {{ option }}
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+<script>
+export default {
   name: 'TextField',
+  model: {
+    prop: 'value',
+    event: 'input',
+  },
   props: {
     label: {
       type: String,
@@ -20,17 +23,49 @@ export default Vue.extend({
       type: Array,
       default: null,
     },
+    selected: {
+      type: String,
+    },
+    value: {
+      type: String,
+      required: true,
+    },
+    validate: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data: () => ({
-    value: 0,
-    selected: '1',
-  }),
   computed: {
-    hasOptions(): Boolean {
+    hasOptions() {
       return !!this.options?.length
     },
   },
-})
+  watch: {
+    selected(value) {
+      this.$emit('change', value)
+    },
+  },
+  methods: {
+    handleChange({ target }) {
+      this.$emit('change', target.value)
+    },
+    handleInput({ target }) {
+      let value = target.value
+
+      this.$emit('input', value)
+    },
+    handleBlurInput() {
+      let value = null
+      if (this.validate) {
+        const formattedFloat = this.value.replace(/\,/g, '.').replace(/\s/, '')
+        const isValid = /^\d+(\.\d+)?$/.test(formattedFloat)
+        if (!isValid) value = ''
+        else value = formattedFloat
+        this.$emit('input', value)
+      }
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +83,7 @@ export default Vue.extend({
     display: flex;
     align-items: center;
 
-    &-amount {
+    &-text {
       border: 1px solid $color-primary;
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px;

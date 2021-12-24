@@ -1,5 +1,5 @@
 <template lang="pug">
-    button(:class="['button', { 'button_primary': primary, 'button_block': block }]")
+    button(:class="['button', { 'button_primary': primary, 'button_block': block }]", v-on="$listeners")
         slot
 </template>
 

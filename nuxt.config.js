@@ -1,4 +1,7 @@
 export default {
+  server: {
+    port: 8000, // default: 3000
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'CoinLoan Exchange',
@@ -21,7 +24,7 @@ export default {
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['@/plugins/api/index.ts'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

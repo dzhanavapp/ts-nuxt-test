@@ -1,20 +1,17 @@
 //mobile first
 @mixin sm {
-  transition: 0.3s;
   @media screen and (min-width: $breakpoint-sm) {
     @content;
   }
 }
 
 @mixin md {
-  transition: 0.3s;
   @media screen and (min-width: $breakpoint-md) {
     @content;
   }
 }
 
 @mixin lg {
-  transition: 0.3s;
   @media screen and (min-width: $breakpoint-lg) {
     @content;
   }

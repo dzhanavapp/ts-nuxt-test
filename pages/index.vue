@@ -1,6 +1,6 @@
 <template lang="pug">
   main
-    ExcahngeSection
+    ExchangeSection
 </template>
 
 <script lang="ts">
